@@ -11,3 +11,6 @@ jwt:
     subject: authenticate
     audience: https://t-cook.de
     issuer: https://t-cook.de
+assets:
+  root: ../statistikwbt-client/dist
+  index: index.html
