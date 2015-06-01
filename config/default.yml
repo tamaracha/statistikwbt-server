@@ -1,0 +1,13 @@
+server:
+  port: 3000
+  host: localhost
+db:
+  host: localhost
+  database: MyDatabase
+jwt:
+  secret: H9XVhpaHhNuoHkGNQ4vk
+  options:
+    expiresInMinutes: 60*24*7
+    subject: authenticate
+    audience: https://t-cook.de
+    issuer: https://t-cook.de
