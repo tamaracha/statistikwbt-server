@@ -2,7 +2,7 @@
 
 var koa=require('koa');
 var send=require('koa-send');
-var mount=require('koa-mount');
+//var mount=require('koa-mount');
 var helmet=require('koa-helmet');
 var api=require('./api');
 var mongoose=require('mongoose');
@@ -17,8 +17,7 @@ app.use(require('koa-morgan').middleware('dev'))
 .use(helmet.defaults())
 .use(api.routes())
 .use(api.allowedMethods())
-.use(mount('/dist',require('koa-static')(assets.root)))
-//.use(require('koa-static')(assets.root))
+//.use(mount('/dist',require('koa-static')(assets.root)))
 .use(function *(){
   yield send(this, assets.index,{root: assets.root});
 })
