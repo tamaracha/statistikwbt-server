@@ -16,9 +16,15 @@ require('koa-onerror')(app);
 app.use(require('koa-morgan').middleware('dev'))
 .use(helmet.defaults())
 .use(api.routes())
-.use(api.allowedMethods())
-//.use(mount('/dist',require('koa-static')(assets.root)))
-.use(function *(){
+.use(api.allowedMethods());
+switch(process.env.NODE_ENV){
+  case 'production':
+    console.log('serving statics via nginx');
+    break;
+  default:
+    app.use(require('koa-mount')('/dist',require('koa-static')(assets.root)))
+}
+app.use(function *(){
   yield send(this, assets.index,{root: assets.root});
 })
 .listen(server.port,function(){
