@@ -9,8 +9,6 @@ jwt:
   options:
     expiresInMinutes: 60*24*7
     subject: authenticate
-    audience: https://t-cook.de
-    issuer: https://t-cook.de
 assets:
   root: ../statistikwbt-client/dist
   index: index.html

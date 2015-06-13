@@ -2,7 +2,6 @@
 
 var koa=require('koa');
 var send=require('koa-send');
-//var mount=require('koa-mount');
 var helmet=require('koa-helmet');
 var api=require('./api');
 var mongoose=require('mongoose');

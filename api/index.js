@@ -1,5 +1,5 @@
 'use strict';
-
+var mailer=require('./services/mailer');
 var Router=require('koa-router');
 var api=module.exports=new Router({prefix: '/api'});
 
