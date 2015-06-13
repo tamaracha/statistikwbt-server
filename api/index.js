@@ -16,6 +16,15 @@ api.use(body);
 
 /* routes */
 // users
+api.get('/testmail',function *(){
+  var mailOpts={
+    subject: 'testmail',
+    to: 'tamara.cook@psychol.uni-giessen.de',
+    text: 'test'
+  };
+  var test=yield mailer.sendMailAsync(mailOpts);
+  this.body=test;
+});
 api.head('/users',ctrl.user.check);
 api.post('/users',ctrl.user.create);
 api.get('/users/:user',jwt,ctrl.user.show);
