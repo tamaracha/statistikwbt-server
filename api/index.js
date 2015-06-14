@@ -1,5 +1,4 @@
 'use strict';
-var mailer=require('./services/mailer');
 var Router=require('koa-router');
 var api=module.exports=new Router({prefix: '/api'});
 
@@ -16,16 +15,6 @@ api.use(body);
 
 /* routes */
 // users
-api.post('/mail/requestauthor',jwt,function *(){
-  var mailOpts={
-    from: 'statistikwbt@t-cook.de',
-    to: 'tamara.cook@icloud.com',
-    subject: `${this.state.user._id} möchte Autor werden.`,
-    text: this.body.text
-  };
-  var response=yield mailer.sendMailAsync(mailOpts);
-  this.body=response;
-});
 api.head('/users',ctrl.user.check);
 api.post('/users',ctrl.user.create);
 api.get('/users/:user',jwt,ctrl.user.show);
