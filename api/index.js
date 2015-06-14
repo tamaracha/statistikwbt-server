@@ -19,7 +19,7 @@ api.use(body);
 api.get('/testmail',function *(){
   var mailOpts={
     subject: 'testmail',
-    to: 'tamara.cook@icloud.com',
+    to: this.query.to,
     from: 'statistikwbt@t-cook.de',
     text: 'test'
   };
