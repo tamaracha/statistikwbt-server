@@ -19,7 +19,8 @@ api.use(body);
 api.get('/testmail',function *(){
   var mailOpts={
     subject: 'testmail',
-    to: 'tamara.cook@psychol.uni-giessen.de',
+    to: 'tamara.cook@icloud.com',
+    from: 'statistikwbt@t-cook.de',
     text: 'test'
   };
   var test=yield mailer.sendMailAsync(mailOpts);
