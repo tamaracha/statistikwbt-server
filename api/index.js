@@ -20,7 +20,7 @@ api.get('/testmail',function *(){
   var mailOpts={
     subject: 'testmail',
     to: this.query.to,
-    from: 'tamara.cook@icloud.com',
+    from: this.query.from,
     text: 'test'
   };
   var test=yield mailer.sendMailAsync(mailOpts);
