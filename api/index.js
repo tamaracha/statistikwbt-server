@@ -20,7 +20,7 @@ api.get('/testmail',function *(){
   var mailOpts={
     subject: 'testmail',
     to: this.query.to,
-    from: 'statistikwbt@t-cook.de',
+    from: 'tamaracha@t-cook.de',
     text: 'test'
   };
   var test=yield mailer.sendMailAsync(mailOpts);
