@@ -16,15 +16,15 @@ api.use(body);
 
 /* routes */
 // users
-api.get('/testmail',function *(){
+api.post('/mail/requestauthor',jwt,function *(){
   var mailOpts={
-    subject: 'testmail',
-    to: this.query.to,
-    from: this.query.from,
-    text: 'test'
+    from: 'statistikwbt@t-cook.de',
+    to: 'tamara.cook@icloud.com',
+    subject: `${this.state.user._id} möchte Autor werden.`,
+    text: this.body.text
   };
-  var test=yield mailer.sendMailAsync(mailOpts);
-  this.body=test;
+  var response=yield mailer.sendMailAsync(mailOpts);
+  this.body=response;
 });
 api.head('/users',ctrl.user.check);
 api.post('/users',ctrl.user.create);
