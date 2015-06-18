@@ -10,16 +10,16 @@ var TestSchema=new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['multiple choice','single choice','input']
+    enum: ['multiple','single','input']
   },
-  options: [{
+  choices: [{
     text: {
       required: true,
       type: String
     },
     correct: {
       type: Boolean,
-      required: true
+      default: false
     },
     feedback: {
       type: String,
@@ -32,10 +32,12 @@ var TestSchema=new mongoose.Schema({
     index: true
   },
   tags: [{
-    type: String,
-    index: true
+  text: {
+      type: String,
+      index: true
+    }
   }]
 });
-TestSchema.path('options').validate($.notEmpty);
+TestSchema.path('choices').validate($.notEmpty);
 
 module.exports=mongoose.model('Test',TestSchema);

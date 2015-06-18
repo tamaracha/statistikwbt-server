@@ -46,13 +46,22 @@ $.destroy=function *(){
 };
 
 $.tests=function *(){
-  var tests=yield Test.find({unit: this.params.unit}).lean().exec();
+  var tests=yield Test.find({unit: this.params.unit}).exec();
   this.assert(tests,'not found',404);
-  tests=_.chain(tests)
-  .shuffle()
-  .transform(function(result,value,index){
-    result[index].options=_.shuffle(value.options);
-  })
-  .value();
+  if(tests.length>1){tests=_.shuffle(tests);}
+  _.each(tests,function(value){
+    if(value.choices&&value.choices.length>1){
+    var shuffledOptions=_.shuffle(value.choices);
+    value.choices=shuffledOptions;
+    }
+  });
   this.body=tests;
+};
+
+$.createTest=function *(){
+  var newTest=this.request.body;
+  newTest.unit=this.params.unit;
+  var test=yield Test.create(newTest);
+  this.assert(test,'test not created',404);
+  this.body=test;
 };

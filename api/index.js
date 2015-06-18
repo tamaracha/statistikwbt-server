@@ -29,6 +29,7 @@ api.get('/units/:unit',jwt,log,ctrl.unit.show);
 api.patch('/units/:unit',jwt,ctrl.unit.update);
 api.delete('/units/:unit',jwt,ctrl.unit.destroy);
 api.get('/units/:unit/tests',ctrl.unit.tests);
+api.post('/units/:unit/tests',ctrl.unit.createTest);
 api.get('/units/:unit/topics',ctrl.topic.index);
 api.post('/units/:unit/topics',ctrl.topic.create);
 api.patch('/units/:unit/topics',ctrl.topic.edit);

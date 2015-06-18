@@ -20,7 +20,8 @@ $.create=function *(){
   this.assert(unit,'unit not found',404);
   unit.topics.push(this.request.body);
   var newUnit=yield unit.save();
-  this.body=newUnit.topics;
+  var topic=newUnit.topics[newUnit.topics.length-1];
+  this.body=topic;
 };
 
 $.show=function *(){
