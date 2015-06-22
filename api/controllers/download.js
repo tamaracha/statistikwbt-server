@@ -1,86 +1,62 @@
-var jwt,pdc,mime,Unit,User,e,fs,compiled;
-jwt=require("jsonwebtoken");
-Promise.promisifyAll(jwt);
-pdcAsync=Promise.promisify(require("pdc"));
-mime=require("mime");
-Unit=require("./models/unit");
-User=require("./models/user");
-e=require("./errors");
-fs=require("fs");
-Promise.promisifyAll(fs);
-fs.readFileAsync(__dirname+"/download.md","utf8")
-.then(function(template){
-  compiled=_.template(template,null,{variable: "data"});
-});
+var _=require('lodash');
+var fs=require('fs');
+var pdcAsync=Promise.promisify(require('pdc'));
+var Unit=require('../models/unit');
+var template=fs.readFileSync(__dirname+'/download.md','utf8');
+var compiled=_.template(template,null,{variable: 'data', imports: {_: _}});
+var send=require('koa-send');
+var $=module.exports={};
 
-exports.checkUser=function(req,res,next){
-  if(!req.query.token){return next(e.unauthorized("no token found"));}
-  jwt.verifyAsync(req.query.token,config.jwt.secret)
-  .then(function(token){
-    return User.findById(token._id)
-    .lean()
-    .execAsync();
-  })
-  .then(function(user){
-    if(!user){return e.notFound("user not found");}
-    req.user=user;
-    return next();
-  })
-  .catch(function(e){
-    return next(e);
-  });
+$.getToken=function *(next){
+  if(!this.query.token){
+    this.throw('no token found');
+  }
+  else{
+    this.request.headers['authorization']='bearer '+this.query.token;
+    yield next;
+  }
 };
 
-exports.find=function(req,res){
+$.getUnits=function *(next){
+  if(_.isString(this.query.units)){
+    this.query.units=[this.query.units];
+  }
+  if(_.isString(this.query.contents)){
+    this.query.contents=[this.query.contents];
+  }
   var query=Unit.find()
   .sort({position: 1});
-  if(req.query.units){
-    if(_.isArray(req.query.units)){query.in("_id",req.query.units);}
-    if(_.isString(req.query.units)){query.in("_id",[req.query.units]);}
+  if(this.query.units){query.in("_id",this.query.units);}
+  var units=yield query.exec();
+  this.assert(units,'no units found',404);
+  this.state.units=units;
+  yield next;
+};
+
+$.getMarkdown=function *(next){
+  var md=compiled({units: this.state.units,contents: this.query.contents});
+  this.assert(md,'markdown not compiled');
+  this.response.type=this.query.format;
+  this.attachment('statistikwbt.'+this.query.format);
+  if(this.query.format==='markdown'||this.query.format==='md'){
+    this.body=md;
   }
-  query.execAsync()
-  .then(function(units){
-    var contents={};
-    if(_.isArray(req.query.contents)){
-      _.forEach(req.query.contents,function(value){
-        contents[value]=true;
-      });
-    }
-    if(_.isString(req.query.contents)){
-      contents[req.query.contents]=true;
-    }
-    var md=compiled({units: units,contents: contents});
-    return md;
-  })
-  .then(function(md){
-    var format=req.query.format||"md";
-    var filePath=process.cwd()+"/public/";
-    res.setHeader("content-disposition", "attachment; filename=Statistik-WBT."+format);
-    res.setHeader("content-type", mime.lookup(format));
-    switch(format){
-      case "md": return res.send(md);
-      case "rtf":
-        return pdcAsync(md,"markdown","rtf",["-s"],{cwd: filePath})
-        .then(function(doc){
-          res.send(doc);
-        });
-      case "latex":
-        return pdcAsync(md,"markdown","latex",["-s"],{cwd: filePath})
-        .then(function(doc){
-          res.send(doc);
-        });
-      case "docx":
-        return pdcAsync(md,"markdown","docx",["-s","-o",req.user._id+".docx"],{cwd: filePath})
-        .then(function(doc){
-          return res.sendFile(filePath+req.user._id+".docx");
-        });
-      case "epub":
-        return pdcAsync(md,"markdown","epub",["-s","-o",req.user._id+".epub"],{cwd: filePath})
-        .then(function(doc){
-          return res.sendFile(filePath+req.user._id+".epub");
-        });
-      default: return res.send(md);
-    }
-  })
-  .catch(e.onError(res));
+  else{
+    this.state.md=md;
+    yield next;
+  }
+};
+
+$.getFile=function *(){
+  var fileDir=process.cwd()+'/.tmp/';
+  var binary=['docx','epub'];
+  if(_.contains(binary,this.query.format)){
+    var fileName=`${this.state.user._id}.${this.query.format}`;
+    yield pdcAsync(this.state.md,"markdown",this.query.format,["-s","-o",fileName],{cwd: fileDir});
+    yield send(this,fileName,{root: fileDir});
+  }
+  else{
+    var doc=yield pdcAsync(this.state.md,"markdown",this.query.format,["-s"],{cwd: fileDir});
+    this.body=doc;
+  }
 };

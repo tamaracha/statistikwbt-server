@@ -58,5 +58,5 @@ UnitSchema.methods.move=function(arr,_id,dir){
     });
   });
 };
-
+UnitSchema.plugin(require('../plugins/date'));
 module.exports=mongoose.model("Unit",UnitSchema);

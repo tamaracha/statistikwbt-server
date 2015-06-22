@@ -46,3 +46,5 @@ api.post('/tests',ctrl.test.create);
 api.post('/ratings',jwt,ctrl.rating.create);
 api.post('/comments',jwt,ctrl.comment.create);
 api.post('/guesses',jwt,ctrl.guess.create);
+
+api.get('/downloads',ctrl.download.getToken,jwt,ctrl.download.getUnits,ctrl.download.getMarkdown,ctrl.download.getFile);

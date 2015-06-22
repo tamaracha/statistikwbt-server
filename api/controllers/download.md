@@ -8,7 +8,7 @@ ${unit.description}
 ## ${topic.title}
 ${topic.body}
 <%
-  if(data.contents.examples){
+  if(_.contains(data.contents,'examples')){
 %>
 ### Beispiele
 <%_.forEach(topic.examples,function(example){%>
@@ -17,7 +17,7 @@ ${example.body}
 <%
   });
   }
-  if(data.contents.extras){
+  if(_.contains(data.contents,'extras')){
 %>
 ### Extras
 <%_.forEach(topic.extras,function(extra){%>

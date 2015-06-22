@@ -8,6 +8,7 @@ function requireControllers(files){
 }
 module.exports=requireControllers([
   'comment',
+  'download',
   'guess',
   'rating',
   'summary',
