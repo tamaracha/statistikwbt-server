@@ -1,13 +1,27 @@
 var _=require('lodash');
 var fs=require('fs');
-var pdcAsync=Promise.promisify(require('pdc'));
+var path=require('path');
+var pandoc=require('../services/pandoc');
 var Unit=require('../models/unit');
 var template=fs.readFileSync(__dirname+'/download.md','utf8');
 var compiled=_.template(template,null,{variable: 'data', imports: {_: _}});
 var send=require('koa-send');
+var download=require('config').get('download');
+if(!path.isAbsolute(download.cwd)){
+  var cwd=path.join(process.cwd(),download.cwd);
+}
+else{
+  var cwd=download.cwd;
+}
+if(!path.isAbsolute(download.dest)){
+  var dest=path.join(process.cwd(),download.dest);
+}
+else{
+  var dest=download.dest;
+}
 var $=module.exports={};
 
-$.getToken=function *(next){
+$.getToken=function *getToken(next){
   if(!this.query.token){
     this.throw('no token found');
   }
@@ -17,7 +31,7 @@ $.getToken=function *(next){
   }
 };
 
-$.getUnits=function *(next){
+$.getUnits=function *getUnits(next){
   if(_.isString(this.query.units)){
     this.query.units=[this.query.units];
   }
@@ -33,7 +47,7 @@ $.getUnits=function *(next){
   yield next;
 };
 
-$.getMarkdown=function *(next){
+$.getMarkdown=function *getMarkdown(next){
   var md=compiled({units: this.state.units,contents: this.query.contents});
   this.assert(md,'markdown not compiled');
   this.response.type=this.query.format;
@@ -47,16 +61,16 @@ $.getMarkdown=function *(next){
   }
 };
 
-$.getFile=function *(){
-  var fileDir=process.cwd()+'/.tmp/';
+$.getFile=function *getFile(){
   var binary=['docx','epub'];
   if(_.contains(binary,this.query.format)){
     var fileName=`${this.state.user._id}.${this.query.format}`;
-    yield pdcAsync(this.state.md,"markdown",this.query.format,["-s","-o",fileName],{cwd: fileDir});
-    yield send(this,fileName,{root: fileDir});
+    var filePath=path.join(dest,fileName);
+    yield pandoc(this.state.md,"markdown",this.query.format,["-s","-o",filePath],{cwd});
+    yield send(this,fileName,{root: dest});
   }
   else{
-    var doc=yield pdcAsync(this.state.md,"markdown",this.query.format,["-s"],{cwd: fileDir});
+    var doc=yield pandoc(this.state.md,"markdown",this.query.format,["-s"],{cwd});
     this.body=doc;
   }
 };
