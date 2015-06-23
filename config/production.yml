@@ -1,0 +1,3 @@
+logging: false
+assets:
+  serve: false

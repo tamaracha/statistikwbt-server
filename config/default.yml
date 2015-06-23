@@ -10,5 +10,7 @@ jwt:
     expiresInMinutes: 60*24*7
     subject: authenticate
 assets:
+  serve: true
   root: ../statistikwbt-client/dist
   index: index.html
+logging: true
