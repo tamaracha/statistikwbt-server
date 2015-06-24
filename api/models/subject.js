@@ -1,7 +1,6 @@
-var mongoose,SubjectSchema,Subject;
-
-mongoose=require("mongoose");
-SubjectSchema=mongoose.Schema({
+'use strict';
+const mongoose=require('mongoose');
+const SubjectSchema=mongoose.Schema({
   group: {
     required: true,
     type: String
@@ -12,6 +11,4 @@ SubjectSchema=mongoose.Schema({
   }
 });
 
-Subject=mongoose.model("Subject",SubjectSchema);
-Promise.promisifyAll(Subject.prototype);
-module.exports=Subject;
+module.exports=mongoose.model('Subject',SubjectSchema);

@@ -1,22 +1,22 @@
 'use strict';
-var mongoose=require("mongoose");
-var ObjectId=mongoose.Schema.Types.ObjectId
+const mongoose=require('mongoose');
+const ObjectId=mongoose.Schema.Types.ObjectId;
 
-var ViewSchema=new mongoose.Schema({
+const ViewSchema=new mongoose.Schema({
   unit: {
     type: ObjectId,
     required: true,
-    ref: "unit"
+    ref: 'unit'
   },
   topic: {
     type: ObjectId,
-    ref: "unit.topic"
+    ref: 'unit.topic'
   },
   user: {
     type: ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true
   }
 });
 
-module.exports=mongoose.model("View",ViewSchema);
+module.exports=mongoose.model('View',ViewSchema);

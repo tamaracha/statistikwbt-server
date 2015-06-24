@@ -1,11 +1,11 @@
 'use strict';
-var Test=require('../models/test');
-var _=require('lodash');
-var jsonpatch=require('fast-json-patch');
-var $=module.exports={};
+const Test=require('../models/test');
+const _=require('lodash');
+const jsonpatch=require('fast-json-patch');
+const $=module.exports={};
 
 $.index=function *(){
-  var tests=yield Test.find(
+  let tests=yield Test.find(
     this.query.conditions||null,
     this.query.projections||null,
     this.query.options||null
@@ -18,21 +18,21 @@ $.index=function *(){
 };
 
 $.create=function *(){
-  var test=yield Test.create(this.request.body);
+  let test=yield Test.create(this.request.body);
   this.assert(test,'test not created',404);
   this.status=200;
 };
 
 $.show=function *(){
-  var test=yield Test.findById(this.params.test);
+  let test=yield Test.findById(this.params.test);
   this.assert(test,'test not found',404);
   this.body=test;
 };
 
 $.update=function *(){
-  var test=yield Test.findById(this.params.test).exec();
+  let test=yield Test.findById(this.params.test).exec();
   this.assert(test,'test not found',404);
-  var patch=jsonpatch.apply(test,this.request.body);
+  let patch=jsonpatch.apply(test,this.request.body);
   if(patch===true){
     yield test.save();
     this.status=200;

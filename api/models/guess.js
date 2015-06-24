@@ -1,17 +1,17 @@
-var mongoose,ObjectId,GuessSchema;
-mongoose=require("mongoose");
-ObjectId=mongoose.Schema.Types.ObjectId;
+'use strict';
+const mongoose=require('mongoose');
+const ObjectId=mongoose.Schema.Types.ObjectId;
 
-GuessSchema=new mongoose.Schema({
+const GuessSchema=new mongoose.Schema({
   unit: {
     type: ObjectId,
     required: true,
-    ref: "unit"
+    ref: 'unit'
   },
   user: {
     type: ObjectId,
     required: true,
-    ref: "user"
+    ref: 'user'
   },
   item: {
     type: ObjectId,
@@ -24,4 +24,4 @@ GuessSchema=new mongoose.Schema({
   }
 });
 
-module.exports=mongoose.model("Guess",GuessSchema);
+module.exports=mongoose.model('Guess',GuessSchema);

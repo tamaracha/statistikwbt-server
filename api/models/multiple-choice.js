@@ -1,7 +1,7 @@
-var mongoose,MultipleChoiceSchema,MultipleChoice;
-mongoose=require("mongoose");
+'use strict';
+const mongoose=require('mongoose');
 
-MultipleChoiceSchema=new mongoose.Schema({
+const MultipleChoiceSchema=new mongoose.Schema({
   text: {
     type: String,
     required: true
@@ -26,5 +26,4 @@ MultipleChoiceSchema=new mongoose.Schema({
   }]
 });
 
-MultipleChoice=mongoose.model("MultipleChoice",MultipleChoiceSchema);
-module.exports=MultipleChoice;
+module.exports=mongoose.model('MultipleChoice',MultipleChoiceSchema);

@@ -1,16 +1,16 @@
 'use strict';
-var Router=require('koa-router');
-var api=module.exports=new Router({prefix: '/api'});
+const Router=require('koa-router');
+const api=module.exports=new Router({prefix: '/api'});
 
-var config=require('config').get('jwt');
-var ctrl=require('./controllers');
+const config=require('config').get('jwt');
+const ctrl=require('./controllers');
 
 // middleware
-var body=require('koa-body')();
-var jwtConfig=config.options;
+const body=require('koa-body')();
+const jwtConfig=config.options;
 jwtConfig.secret=config.secret;
-var jwt=require('koa-jwt')(jwtConfig);
-var log=require('./middleware/log');
+const jwt=require('koa-jwt')(jwtConfig);
+const log=require('./middleware/log');
 api.use(body);
 
 /* routes */
@@ -47,4 +47,10 @@ api.post('/ratings',jwt,ctrl.rating.create);
 api.post('/comments',jwt,ctrl.comment.create);
 api.post('/guesses',jwt,ctrl.guess.create);
 
-api.get('/downloads',ctrl.download.getToken,jwt,ctrl.download.getUnits,ctrl.download.getMarkdown,ctrl.download.getFile);
+api.get('/downloads',
+  ctrl.download.getToken,
+  jwt,
+  ctrl.download.getUnits,
+  ctrl.download.getMarkdown,
+  ctrl.download.getFile
+);

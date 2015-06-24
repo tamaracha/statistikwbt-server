@@ -1,6 +1,7 @@
-_=require('lodash');
+'use strict';
+const _=require('lodash');
 function requireControllers(files){
-  var controllers={};
+  let controllers={};
   _.forEach(files,function(f){
     controllers[f]=require('./'+f);
   });

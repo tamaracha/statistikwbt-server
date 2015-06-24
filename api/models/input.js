@@ -1,14 +1,14 @@
-var mongoose,InputSchema,Input;
-mongoose=require("mongoose");
+'use strict';
+const mongoose=require('mongoose');
 
-InputSchema=new mongoose.Schema({
+const InputSchema=new mongoose.Schema({
   text: {
     type: String,
     required: true
   },
   type: {
     type: String,
-    default: "fill"
+    default: 'fill'
   },
   correct: {
     type: String,
@@ -26,5 +26,4 @@ InputSchema=new mongoose.Schema({
   }
 });
 
-Input=mongoose.model("Input",InputSchema);
-module.exports=Input;
+module.exports=mongoose.model('Input',InputSchema);

@@ -1,12 +1,8 @@
-var Subject,e;
-Subject=require("./models/subject");
-e=require("./errors");
+'use strict';
+const Subject=require('../models/subject');
+const $={};
 
-exports.find=function(req,res){
-  Subject.find({name: new RegExp(req.query.search,"i")})
-  .execAsync()
-  .then(function(subjects){
-    return res.json(subjects);
-  })
-  .catch(e.onError(res));
+$.find=function *search(){
+  let subjects=yield Subject.find({name: new RegExp(this.query.search,'i')});
+  this.body=subjects;
 };

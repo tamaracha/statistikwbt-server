@@ -1,7 +1,7 @@
-var mongoose,SingleChoiceSchema,SingleChoice;
-mongoose=require("mongoose");
+'use strict';
+const mongoose=require('mongoose');
 
-SingleChoiceSchema=new mongoose.Schema({
+const SingleChoiceSchema=new mongoose.Schema({
   text: {
     type: String,
     required: true
@@ -23,5 +23,4 @@ SingleChoiceSchema=new mongoose.Schema({
   }]
 });
 
-SingleChoice=mongoose.model("SingleChoice",SingleChoiceSchema);
-module.exports=SingleChoice;
+module.exports=mongoose.model('SingleChoice',SingleChoiceSchema);

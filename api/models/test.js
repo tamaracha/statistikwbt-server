@@ -1,8 +1,8 @@
 'use strict';
-var mongoose=require('mongoose');
-var $=require('../services/validate');
+const mongoose=require('mongoose');
+const $=require('../services/validate');
 
-var TestSchema=new mongoose.Schema({
+const TestSchema=new mongoose.Schema({
   text: {
     type: String,
     required: true

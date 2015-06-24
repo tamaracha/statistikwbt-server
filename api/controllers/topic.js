@@ -1,12 +1,12 @@
 'use strict';
-var Unit=require('../models/unit');
-var _=require('lodash');
-var jsonpatch=require('fast-json-patch');
-var ObjectId=require('mongoose').Types.ObjectId;
-var $=module.exports={};
+const Unit=require('../models/unit');
+const _=require('lodash');
+const jsonpatch=require('fast-json-patch');
+const ObjectId=require('mongoose').Types.ObjectId;
+const $=module.exports={};
 
 $.index=function *(){
-  var unit=yield Unit.findById(
+  let unit=yield Unit.findById(
     this.params.unit,
     this.query.projections||null,
     this.query.options||null
@@ -16,28 +16,28 @@ $.index=function *(){
 };
 
 $.create=function *(){
-  var unit=yield Unit.findById(this.params.unit).exec();
+  let unit=yield Unit.findById(this.params.unit).exec();
   this.assert(unit,'unit not found',404);
   unit.topics.push(this.request.body);
-  var newUnit=yield unit.save();
-  var topic=newUnit.topics[newUnit.topics.length-1];
+  let newUnit=yield unit.save();
+  let topic=newUnit.topics[newUnit.topics.length-1];
   this.body=topic;
 };
 
 $.show=function *(){
-  var unit=yield Unit.findById(this.params.unit,'topics').exec();
+  let unit=yield Unit.findById(this.params.unit,'topics').exec();
   this.assert(unit,'unit not found',404);
-  var topic=unit.topics.id(this.params.topic);
+  let topic=unit.topics.id(this.params.topic);
   this.assert(topic,'topic not found',404);
   this.body=topic;
 };
 
 $.update=function *(){
-  var unit=yield Unit.findById(this.params.unit).exec();
+  let unit=yield Unit.findById(this.params.unit).exec();
   this.assert(unit,'unit not found',404);
-  var i=_.findIndex(unit.topics,{_id: ObjectId(this.params.topic)});
+  let i=_.findIndex(unit.topics,{_id: new ObjectId(this.params.topic)});
   this.assert(i>-1,'topic not found',404);
-  var patch=jsonpatch.apply(unit.topics[i],this.request.body,true);
+  let patch=jsonpatch.apply(unit.topics[i],this.request.body,true);
   if(patch===true){
     yield unit.save();
     this.status=200;
@@ -45,7 +45,7 @@ $.update=function *(){
 };
 
 $.destroy=function *(){
-  var unit=yield Unit.findById(this.params.unit).exec();
+  let unit=yield Unit.findById(this.params.unit).exec();
   this.assert(unit,'unit not found',404);
   unit.topics.pull(this.params.topic);
   yield unit.save();
@@ -53,7 +53,7 @@ $.destroy=function *(){
 };
 
 $.edit=function *(){
-  var unit=yield Unit.findById(this.params.unit,'topics').exec();
+  let unit=yield Unit.findById(this.params.unit,'topics').exec();
   this.assert(unit,'unit not found',404);
   switch(this.request.body.action){
     case 'move': unit=yield unit.move('topics',this.params.topic,this.request.body.dir);

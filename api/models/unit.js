@@ -1,9 +1,9 @@
 'use strict';
-var mongoose=require("mongoose");
-var ObjectId=mongoose.Schema.Types.ObjectId;
-var _=require('lodash');
+const mongoose=require('mongoose');
+const ObjectId=mongoose.Schema.Types.ObjectId;
+const _=require('lodash');
 
-var UnitSchema=new mongoose.Schema({
+const UnitSchema=new mongoose.Schema({
   position: Number,
   title: {
     type: String,
@@ -19,24 +19,24 @@ var UnitSchema=new mongoose.Schema({
     type: ObjectId,
     ref: 'unit'
   }],
-  topics: [require("./topic").schema],
+  topics: [require('./topic').schema],
   views: [{
     type: ObjectId,
-    ref: "view"
+    ref: 'view'
   }],
   akzeptanz: {
     ratings: [{
       type: ObjectId,
-      ref: "rating"
+      ref: 'rating'
     }],
     comments: [{
       type: ObjectId,
-      ref: "comment"
+      ref: 'comment'
     }]
   }
 });
 UnitSchema.methods.move=function(arr,_id,dir){
-  var unit,a,b,tmp;
+  let unit,a,b,tmp;
   unit=this;
   return new Promise(function(resolve,reject){
     if(!unit[arr]){return reject('array not found');}
@@ -59,4 +59,4 @@ UnitSchema.methods.move=function(arr,_id,dir){
   });
 };
 UnitSchema.plugin(require('../plugins/date'));
-module.exports=mongoose.model("Unit",UnitSchema);
+module.exports=mongoose.model('Unit',UnitSchema);

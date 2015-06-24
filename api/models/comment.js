@@ -1,42 +1,42 @@
-var mongoose,ObjectId,User,Unit,CommentSchema;
-mongoose=require("mongoose");
-ObjectId=mongoose.Schema.Types.ObjectId
-User=require("./user");
-Unit=require("./unit");
+'use strict';
+const mongoose=require('mongoose');
+const ObjectId=mongoose.Schema.Types.ObjectId;
+const User=require('./user');
+const Unit=require('./unit');
 
-CommentSchema=new mongoose.Schema({
+const CommentSchema=new mongoose.Schema({
   unit: {
     type: ObjectId,
     required: true,
-    ref: "unit"
+    ref: 'unit'
   },
   user: {
     type: ObjectId,
     required: true,
-    ref: "user"
+    ref: 'user'
   },
   value: {
     type: String,
     required: true
   }
 });
-CommentSchema.post("save",function(){
-  var comment=this;
+CommentSchema.post('save',function(){
+  let comment=this;
   return User.findById(comment.user)
-  .execAsync()
+  .exec()
   .then(function(user){
     user.akzeptanz.comments.push(comment._id);
-    return user.saveAsync();
+    return user.save();
   });
 });
-CommentSchema.post("save",function(){
-  var comment=this;
+CommentSchema.post('save',function(){
+  let comment=this;
   return Unit.findById(comment.unit)
-  .execAsync()
+  .exec()
   .then(function(unit){
     unit.akzeptanz.comments.push(comment._id);
-    return unit.saveAsync();
+    return unit.save();
   });
 });
 
-module.exports=mongoose.model("Comment",CommentSchema);
+module.exports=mongoose.model('Comment',CommentSchema);

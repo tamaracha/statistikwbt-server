@@ -1,11 +1,11 @@
-var mongoose,bluebird,bcrypt,validate,ObjectId,fskSchema,UserSchema,User;
-mongoose=require("mongoose");
-bluebird=require('bluebird');
-bcrypt=bluebird.promisifyAll(require("bcrypt-nodejs"));
-validate=require("../services/validate");
-ObjectId=mongoose.Schema.Types.ObjectId
+'use strict';
+const mongoose=require('mongoose');
+const bluebird=require('bluebird');
+const bcrypt=bluebird.promisifyAll(require('bcrypt-nodejs'));
+const validate=require('../services/validate');
+const ObjectId=mongoose.Schema.Types.ObjectId;
 
-UserSchema=new mongoose.Schema({
+const UserSchema=new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -46,25 +46,25 @@ UserSchema=new mongoose.Schema({
   akzeptanz: {
     ratings: [{
       type: ObjectId,
-      ref: "rating"
+      ref: 'rating'
     }],
     comments: [{
       type: ObjectId,
-      ref: "comment"
+      ref: 'comment'
     }]
   },
   complete: [{
     type: ObjectId,
-    ref: "unit"
+    ref: 'unit'
   }],
   views: [{
     type: ObjectId,
-    ref: "view"
+    ref: 'view'
   }]
 });
-UserSchema.pre("save",function(cb){
-  var user=this;
-  if(!user.isModified("password")){return cb();}
+UserSchema.pre('save',function(cb){
+  let user=this;
+  if(!user.isModified('password')){return cb();}
   return bcrypt.hashAsync(user.password,null,null)
   .then(function(hash){
     user.password=hash;
@@ -77,4 +77,4 @@ UserSchema.methods.validatePassword=function(password){
   return bcrypt.compareAsync(password,this.password);
 };
 
-module.exports=mongoose.model("User",UserSchema);
+module.exports=mongoose.model('User',UserSchema);

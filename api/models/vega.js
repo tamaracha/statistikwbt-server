@@ -1,6 +1,5 @@
-var mongoose,VegaSchema,Vega;
-mongoose=require("mongoose");
-VegaSchema=new mongoose.Schema({
+const mongoose=require("mongoose");
+const VegaSchema=new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -13,6 +12,4 @@ VegaSchema=new mongoose.Schema({
   marks: []
 });
 
-Vega=mongoose.model("Vega",VegaSchema);
-Promise.promisifyAll(Vega.prototype);
-module.exports=Vega;
+module.exports=mongoose.model("Vega",VegaSchema);

@@ -1,16 +1,16 @@
 'use strict';
-var Rating=require('../models/rating');
-var Comment=require('../models/comment');
-var Guess=require('../models/guess');
-var ObjectId=require("mongoose").Types.ObjectId
-var _=require('lodash');
-var $=module.exports={};
+const Rating=require('../models/rating');
+const Comment=require('../models/comment');
+const Guess=require('../models/guess');
+const ObjectId=require('mongoose').Types.ObjectId;
+const _=require('lodash');
+const $=module.exports={};
 
 $.guesses=function *(){
-  var guesses=yield Guess.aggregate([{
+  let guesses=yield Guess.aggregate([{
     $match: {
-      user: ObjectId(this.state.user._id),
-      unit: ObjectId(this.params.unit)
+      user: new ObjectId(this.state.user._id),
+      unit: new ObjectId(this.params.unit)
     }
   },{
     $sort: {
@@ -18,11 +18,11 @@ $.guesses=function *(){
     }
   },{
     $group: {
-      _id: "$item",
-      response: {$first: "$response"}
+      _id: '$item',
+      response: {$first: '$response'}
     }
   }]).exec();
-  var data=_.chain(guesses)
+  let data=_.chain(guesses)
   .indexBy('_id')
   .transform(function(result,value,key){
     result[key]=value.response;
@@ -32,21 +32,21 @@ $.guesses=function *(){
 };
 
 $.akzeptanz=function *(){
-  var ratings=yield Rating.aggregate([
+  let ratings=yield Rating.aggregate([
   {
     $match: {
-      "unit": ObjectId(this.params.unit),
-      "user": ObjectId(this.state.user._id)
+      'unit': new ObjectId(this.params.unit),
+      'user': new ObjectId(this.state.user._id)
     }
   },
   {
     $sort: {
-      "_id": -1
+      '_id': -1
     }
   },{
     $group: {
-      _id: "$name",
-      value: {$first: "$value"}
+      _id: '$name',
+      value: {$first: '$value'}
     }
   }]);
   _.chain(ratings)
@@ -55,12 +55,12 @@ $.akzeptanz=function *(){
     result[key]=value.value;
   })
   .value();
-  var comment=yield Comment.findOne({
+  let comment=yield Comment.findOne({
     user: this.status.user._id,
     unit: this.params.unit
   })
   .sort({_id: -1})
   .lean().exec();
-  if(comment){data.comment=comment.value;}
-  this.body=data;
+  if(comment){ratings.comment=comment.value;}
+  this.body=ratings;
 };

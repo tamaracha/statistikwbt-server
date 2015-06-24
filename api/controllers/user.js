@@ -1,46 +1,33 @@
-var User=require('../models/user');
+'use strict';
+const User=require('../models/user');
+const $=module.exports={};
 
-exports.check=function *(){
-  try{
-    var users=yield User.find(this.query).lean().exec();
-    if(users.length===0){this.throw(404,'no users found');}
-    else{this.status=200;}
-  }
-  catch(e){this.throw(e);}
+$.check=function *(){
+  let users=yield User.find(this.query).lean().exec();
+  this.assert(users.length>0,'no users found',404);
+  this.status=200;
 };
 
-exports.create=function *(){
-  try{
-    var user=yield User.create(this.request.body);
-    this.body=user;
-  }
-  catch(e){this.throw(e);}
+$.create=function *(){
+  let user=yield User.create(this.request.body);
+  this.body=user;
 };
 
-exports.show=function *(){
-  try{
-    var user=yield User.findById(this.params.user).lean().exec();
-    this.assert(user,'user not found',404);
-    this.body=user;
-  }
-  catch(e){this.throw(e);}
+$.show=function *(){
+  let user=yield User.findById(this.params.user).lean().exec();
+  this.assert(user,'user not found',404);
+  this.body=user;
 };
 
-exports.update=function *(){
-  try{
-    var user=yield User.findById(this.params.user).exec();
-    this.assert(user,'user not found',404);
-    user=yield user.patch(this.request.body);
-    this.status=200;
-  }
-  catch(e){this.throw(e);}
+$.update=function *(){
+  let user=yield User.findById(this.params.user).exec();
+  this.assert(user,'user not found',404);
+  user=yield user.patch(this.request.body);
+  this.status=200;
 };
 
-exports.destroy=function *(){
-  try{
-    var user=yield User.findByIdAndRemove(this.params.user).exec();
-    this.assert(user,'user not found',404);
-    this.status=200;
-  }
-  catch(e){this.throw(e);}
+$.destroy=function *(){
+  let user=yield User.findByIdAndRemove(this.params.user).exec();
+  this.assert(user,'user not found',404);
+  this.status=200;
 };
