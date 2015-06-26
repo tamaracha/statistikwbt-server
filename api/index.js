@@ -15,33 +15,43 @@ api.use(body);
 
 /* routes */
 // users
-api.head('/users',ctrl.user.check);
-api.post('/users',ctrl.user.create);
-api.get('/users/:user',jwt,ctrl.user.show);
-api.patch('/users/:user',jwt,ctrl.user.update);
-api.delete('/users/:user',jwt,ctrl.user.destroy);
+let users=new Router();
+users.head('/',ctrl.user.check);
+users.post('/',ctrl.user.create);
+users.get('/:user',jwt,ctrl.user.show);
+users.patch('/:user',jwt,ctrl.user.update);
+users.delete('/:user',jwt,ctrl.user.destroy);
+api.use('/users',users.routes());
 api.get('/tokens/new',ctrl.token.new);
 
+let tests=new Router();
+tests.get('/',ctrl.test.index);
+tests.post('/',ctrl.test.create);
+tests.get('/:test',ctrl.test.show);
+tests.put('/:test',ctrl.test.update);
+tests.delete('/:test',ctrl.test.destroy);
+api.use('/tests',tests.routes());
+
 // units
-api.get('/units',jwt,ctrl.unit.index);
-api.post('/units',jwt,ctrl.unit.create);
-api.get('/units/:unit',jwt,log,ctrl.unit.show);
-api.patch('/units/:unit',jwt,ctrl.unit.update);
-api.delete('/units/:unit',jwt,ctrl.unit.destroy);
-api.get('/units/:unit/tests',ctrl.unit.tests);
-api.post('/units/:unit/tests',ctrl.unit.createTest);
-api.get('/units/:unit/topics',ctrl.topic.index);
-api.post('/units/:unit/topics',ctrl.topic.create);
-api.patch('/units/:unit/topics',ctrl.topic.edit);
-api.get('/units/:unit/topics/:topic',ctrl.topic.show);
-api.patch('/units/:unit/topics/:topic',ctrl.topic.update);
-api.delete('/units/:unit/topics/:topic',ctrl.topic.destroy);
-
-api.get('/units/:unit/summaries/guesses',jwt,ctrl.summary.guesses);
-api.get('/units/:unit/summaries/akzeptanz',jwt,ctrl.summary.akzeptanz);
-
-api.get('/tests',ctrl.test.index);
-api.post('/tests',ctrl.test.create);
+let units=new Router();
+units.get('/',jwt,ctrl.unit.index);
+units.post('/',jwt,ctrl.unit.create);
+units.get('/:unit',jwt,log,ctrl.unit.show);
+units.patch('/:unit',jwt,ctrl.unit.update);
+units.delete('/:unit',jwt,ctrl.unit.destroy);
+let topics=new Router();
+topics.get('/',ctrl.topic.index);
+topics.post('/',ctrl.topic.create);
+topics.patch('/',ctrl.topic.edit);
+topics.get('/:topic',ctrl.topic.show);
+topics.patch('/:topic',ctrl.topic.update);
+topics.delete('/:topic',ctrl.topic.destroy);
+units.use('/:unit/topics',topics.routes());
+let summaries=new Router();
+summaries.get('/guesses',jwt,ctrl.summary.guesses);
+summaries.get('/akzeptanz',jwt,ctrl.summary.akzeptanz);
+units.use('/:unit/summaries',summaries.routes());
+api.use('/units',units.routes());
 
 api.post('/ratings',jwt,ctrl.rating.create);
 api.post('/comments',jwt,ctrl.comment.create);

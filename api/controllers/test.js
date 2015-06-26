@@ -20,7 +20,7 @@ $.index=function *(){
 $.create=function *(){
   let test=yield Test.create(this.request.body);
   this.assert(test,'test not created',404);
-  this.status=200;
+  this.body=test;
 };
 
 $.show=function *(){
@@ -29,6 +29,7 @@ $.show=function *(){
   this.body=test;
 };
 
+/*
 $.update=function *(){
   let test=yield Test.findById(this.params.test).exec();
   this.assert(test,'test not found',404);
@@ -37,6 +38,13 @@ $.update=function *(){
     yield test.save();
     this.status=200;
   }
+};
+*/
+
+$.update=function *(){
+  let test=yield Test.findByIdAndUpdate(this.params.test,this.request.body,{new: true});
+  this.assert(test,'test not updated',404);
+  this.body=test;
 };
 
 $.destroy=function *(){
