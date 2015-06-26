@@ -7,7 +7,7 @@ const User=require('../models/user');
 module.exports.new=function *(){
   let login=auth(this.request);
   this.assert(login,'no authorization found',401);
-  let user=yield User.findOne({email: login.name}).exec();
+  let user=yield User.findOne({email: login.name}).select('password').exec();
   this.assert(user,'email not found',404);
   let isMatch=yield user.validatePassword(login.pass);
   this.assert(isMatch,'incorrect password',401);

@@ -14,6 +14,7 @@ const UserSchema=new mongoose.Schema({
   },
   password: {
     type: String,
+    select: false,
     required: true,
     validate: validate.passwordValidator
   },
@@ -24,16 +25,14 @@ const UserSchema=new mongoose.Schema({
   profile: {
     nickname: String,
     age: {
-      type: Number,
-      required: true
+      type: Number
     },
     sex: {
       type: String,
-      required: true
+      enum: ['male','female']
     },
     subject: {
-      type: String,
-      required: true
+      type: String
     },
     reasons: [Boolean]
   },
