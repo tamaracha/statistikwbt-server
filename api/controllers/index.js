@@ -12,6 +12,7 @@ module.exports=requireControllers([
   'download',
   'guess',
   'rating',
+  'subject',
   'summary',
   'test',
   'token',

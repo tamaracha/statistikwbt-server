@@ -56,7 +56,7 @@ $.edit=function *(){
   let unit=yield Unit.findById(this.params.unit,'topics').exec();
   this.assert(unit,'unit not found',404);
   switch(this.request.body.action){
-    case 'move': unit=yield unit.move('topics',this.params.topic,this.request.body.dir);
+    case 'move': unit=yield unit.move('topics',this.request.body.topic,this.request.body.dir);
   }
   this.body=unit.topics;
 };

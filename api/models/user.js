@@ -25,16 +25,22 @@ const UserSchema=new mongoose.Schema({
   profile: {
     nickname: String,
     age: {
-      type: Number
+      type: Number,
+      required: true
     },
     sex: {
       type: String,
+      required: true,
       enum: ['male','female']
     },
     subject: {
-      type: String
+      type: String,
+      required: true
     },
-    reasons: [Boolean]
+    reasons: [{
+      type: String,
+      enum: ['interesse','langeweile','klausur']
+    }]
   },
   fsk: [{
     sessko: {

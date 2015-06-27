@@ -53,6 +53,14 @@ summaries.get('/akzeptanz',jwt,ctrl.summary.akzeptanz);
 units.use('/:unit/summaries',summaries.routes());
 api.use('/units',units.routes());
 
+let subjects=new Router();
+subjects.get('/',ctrl.subject.index);
+subjects.post('/',ctrl.subject.create);
+subjects.get('/:subject',ctrl.subject.show);
+subjects.put('/:subject',ctrl.subject.update);
+subjects.delete('/:subject',ctrl.subject.destroy);
+api.use('/subjects',subjects.routes());
+
 api.post('/ratings',jwt,ctrl.rating.create);
 api.post('/comments',jwt,ctrl.comment.create);
 api.post('/guesses',jwt,ctrl.guess.create);
@@ -64,3 +72,4 @@ api.get('/downloads',
   ctrl.download.getMarkdown,
   ctrl.download.getFile
 );
+
