@@ -61,6 +61,14 @@ subjects.put('/:subject',ctrl.subject.update);
 subjects.delete('/:subject',ctrl.subject.destroy);
 api.use('/subjects',subjects.routes());
 
+let vega = new Router();
+vega.get('/',ctrl.vega.index);
+vega.post('/',ctrl.vega.create);
+vega.get('/:vega',ctrl.vega.show);
+vega.put('/:vega',ctrl.vega.update);
+vega.delete('/:vega',ctrl.vega.destroy);
+api.use('/vega',vega.routes());
+
 api.post('/ratings',jwt,ctrl.rating.create);
 api.post('/comments',jwt,ctrl.comment.create);
 api.post('/guesses',jwt,ctrl.guess.create);

@@ -5,11 +5,6 @@ const VegaSchema=new mongoose.Schema({
     required: true,
     unique: true
   },
-  data: [],
-  scales: [],
-  axes: [],
-  legends: [],
-  marks: []
+  spec: {}
 });
-
 module.exports=mongoose.model("Vega",VegaSchema);

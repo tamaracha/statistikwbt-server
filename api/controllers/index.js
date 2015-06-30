@@ -18,5 +18,6 @@ module.exports=requireControllers([
   'token',
   'topic',
   'unit',
-  'user'
+  'user',
+  'vega'
 ]);
