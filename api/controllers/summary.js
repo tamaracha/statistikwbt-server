@@ -32,7 +32,7 @@ $.guesses=function *(){
 };
 
 $.akzeptanz=function *(){
-  let ratings=yield Rating.aggregate([
+  let ratings = yield Rating.aggregate([
   {
     $match: {
       'unit': new ObjectId(this.params.unit),
@@ -48,15 +48,15 @@ $.akzeptanz=function *(){
       _id: '$name',
       value: {$first: '$value'}
     }
-  }]);
-  _.chain(ratings)
+  }]).exec();
+  ratings = _.chain(ratings)
   .indexBy('_id')
   .transform(function(result,value,key){
     result[key]=value.value;
   })
   .value();
   let comment=yield Comment.findOne({
-    user: this.status.user._id,
+    user: this.state.user._id,
     unit: this.params.unit
   })
   .sort({_id: -1})

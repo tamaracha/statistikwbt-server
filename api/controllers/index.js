@@ -19,5 +19,6 @@ module.exports=requireControllers([
   'topic',
   'unit',
   'user',
-  'vega'
+  'vega',
+  'datasets'
 ]);

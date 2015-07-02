@@ -1,4 +1,7 @@
+'use strict';
 const Vega = require('../models/vega');
+const ObjectId = require('mongoose').Types.ObjectId;
+
 const $ = module.exports = {};
 
 $.index = function *index(){
@@ -17,7 +20,14 @@ $.create = function *create(){
 };
 
 $.show = function *show(){
-  const spec = yield Vega.findById(this.params.vega).lean().exec();
+  const valid = ObjectId.isValid(this.params.vega);
+  let spec;
+  if(valid){
+    spec = yield Vega.findById(this.params.vega).lean().exec();
+  }
+  else{
+    spec = yield Vega.findOne({name: this.params.vega}).lean().exec();
+  }
   this.assert(spec,'spec not found',404);
   this.body=spec;
 };

@@ -5,6 +5,7 @@ const VegaSchema=new mongoose.Schema({
     required: true,
     unique: true
   },
+  fields: {},
   spec: {}
 });
 module.exports=mongoose.model("Vega",VegaSchema);

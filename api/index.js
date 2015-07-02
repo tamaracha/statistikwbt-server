@@ -69,6 +69,9 @@ vega.put('/:vega',ctrl.vega.update);
 vega.delete('/:vega',ctrl.vega.destroy);
 api.use('/vega',vega.routes());
 
+const datasets = new Router();
+datasets.get('/correlation',ctrl.datasets.correlation);
+api.use('/data',datasets.routes());
 api.post('/ratings',jwt,ctrl.rating.create);
 api.post('/comments',jwt,ctrl.comment.create);
 api.post('/guesses',jwt,ctrl.guess.create);
@@ -80,4 +83,3 @@ api.get('/downloads',
   ctrl.download.getMarkdown,
   ctrl.download.getFile
 );
-
