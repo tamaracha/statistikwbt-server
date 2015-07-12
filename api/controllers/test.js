@@ -12,7 +12,7 @@ $.index=function *(){
   ).lean().exec();
   tests=_.shuffle(tests);
   _.forEach(tests,function(test){
-    test.options=_.shuffle(test.options);
+    test.choices = _.shuffle(test.choices);
   });
   this.body=tests;
 };
