@@ -12,11 +12,13 @@ $.guesses=function *(){
       user: new ObjectId(this.state.user._id),
       unit: new ObjectId(this.params.unit)
     }
-  },{
+  },
+  {
     $sort: {
       _id: -1
     }
-  },{
+  },
+  {
     $group: {
       _id: '$item',
       response: {$first: '$response'}

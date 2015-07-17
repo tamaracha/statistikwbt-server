@@ -2,26 +2,22 @@
 const mongoose=require('mongoose');
 const ObjectId=mongoose.Schema.Types.ObjectId;
 
+const ResponseSchema = new mongoose.Schema({
+  value: mongoose.Schema.Types.Mixed
+});
+
 const GuessSchema=new mongoose.Schema({
-  unit: {
-    type: ObjectId,
-    required: true,
-    ref: 'unit'
-  },
   user: {
     type: ObjectId,
     required: true,
-    ref: 'user'
+    ref: 'users'
   },
-  item: {
+  test: {
     type: ObjectId,
-    required: true
+    required: true,
+    ref: 'tests'
   },
-  response: {
-    single: ObjectId,
-    multiple: [ObjectId],
-    input: String
-  }
+  responses: [ResponseSchema]
 });
 
 module.exports=mongoose.model('Guess',GuessSchema);

@@ -1,20 +1,42 @@
 'use strict';
-const Test=require('../models/test');
-const _=require('lodash');
-const jsonpatch=require('fast-json-patch');
-const $=module.exports={};
+const Test = require('../models/test');
+const Guess = require('../models/guess');
+const _ = require('lodash');
+const jsonpatch = require('fast-json-patch');
+const $ = module.exports={};
 
 $.index=function *(){
-  let tests=yield Test.find(
-    this.query.conditions||null,
-    this.query.projections||null,
-    this.query.options||null
-  ).lean().exec();
-  tests=_.shuffle(tests);
-  _.forEach(tests,function(test){
-    test.choices = _.shuffle(test.choices);
-  });
-  this.body=tests;
+  if(this.query.mode==='exercise'){
+    let tests = yield Test.shuffle(
+      this.query.conditions||null,
+      this.query.projections||null,
+      this.query.options||null
+    );
+    const ids = _.map(tests,'_id');
+    let guesses = yield Guess.find({
+      user: this.state.user._id
+    })
+    .in('test',ids)
+    .lean().exec();
+    this.body = _.transform(tests,function(result,t,i){
+      const g = _.find(guesses,{test: t._id});
+      const test = {
+        item: t
+      };
+      if(g){
+       test.guess = g;
+      }
+      result[i] = test;
+    },[],this);
+  }
+  else{
+    let tests=yield Test.find(
+      this.query.conditions||null,
+      this.query.projections||null,
+      this.query.options||null
+    ).lean().exec();
+    this.body = tests;
+  }
 };
 
 $.create=function *(){
