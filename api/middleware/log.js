@@ -1,6 +1,4 @@
 'use strict';
-const View=require('../models/view');
-
 module.exports=function *log(next){
   let data={
     unit: this.params.unit,
@@ -8,5 +6,5 @@ module.exports=function *log(next){
   };
   if(this.params.topic){data.topic=this.params.topic;}
   yield next;
-  yield View.create(data);
+  yield models.View.create(data);
 };

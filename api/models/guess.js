@@ -1,12 +1,8 @@
 'use strict';
 const mongoose=require('mongoose');
 const ObjectId=mongoose.Schema.Types.ObjectId;
-
-const ResponseSchema = new mongoose.Schema({
-  value: mongoose.Schema.Types.Mixed
-});
-
-const GuessSchema=new mongoose.Schema({
+const ResponseSchema = require('./response');
+module.exports = new mongoose.Schema({
   user: {
     type: ObjectId,
     required: true,
@@ -19,5 +15,3 @@ const GuessSchema=new mongoose.Schema({
   },
   responses: [ResponseSchema]
 });
-
-module.exports=mongoose.model('Guess',GuessSchema);

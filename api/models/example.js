@@ -1,7 +1,6 @@
 'use strict';
 const mongoose=require('mongoose');
-
-const ExampleSchema=new mongoose.Schema({
+module.exports = new mongoose.Schema({
   title: {
     type: String,
     required: true
@@ -12,5 +11,3 @@ const ExampleSchema=new mongoose.Schema({
     required: true
   }
 });
-
-module.exports=mongoose.model('Example',ExampleSchema);

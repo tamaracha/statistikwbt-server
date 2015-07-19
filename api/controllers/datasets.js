@@ -1,3 +1,4 @@
+'use strict';
 const R = require('../services/R');
 const $ = module.exports = {};
 

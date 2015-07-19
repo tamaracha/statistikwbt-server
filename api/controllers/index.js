@@ -1,14 +1,8 @@
 'use strict';
 const _=require('lodash');
-function requireControllers(files){
-  let controllers={};
-  _.forEach(files,function(f){
-    controllers[f]=require('./'+f);
-  });
-  return controllers;
-}
-module.exports=requireControllers([
+const files = [
   'comment',
+  'done',
   'download',
   'guess',
   'rating',
@@ -21,4 +15,7 @@ module.exports=requireControllers([
   'user',
   'vega',
   'datasets'
-]);
+];
+module.exports = _.transform(files,function(ctrl,f){
+  ctrl[f] = require('./'+f);
+},{});

@@ -2,8 +2,8 @@
 const mongoose=require('mongoose');
 const ObjectId=mongoose.Schema.Types.ObjectId;
 const _=require('lodash');
-
-const UnitSchema=new mongoose.Schema({
+const TopicSchema = require('./topic');
+const UnitSchema = module.exports = new mongoose.Schema({
   position: Number,
   title: {
     type: String,
@@ -19,7 +19,7 @@ const UnitSchema=new mongoose.Schema({
     type: ObjectId,
     ref: 'unit'
   }],
-  topics: [require('./topic').schema],
+  topics: [TopicSchema],
   views: [{
     type: ObjectId,
     ref: 'view'
@@ -59,4 +59,3 @@ UnitSchema.methods.move=function(arr,_id,dir){
   });
 };
 UnitSchema.plugin(require('../plugins/date'));
-module.exports=mongoose.model('Unit',UnitSchema);

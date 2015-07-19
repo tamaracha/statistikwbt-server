@@ -1,6 +1,6 @@
 'use strict';
 const mongoose=require('mongoose');
-const SubjectSchema=mongoose.Schema({
+module.exports = mongoose.Schema({
   group: {
     required: true,
     type: String
@@ -10,5 +10,3 @@ const SubjectSchema=mongoose.Schema({
     type: String
   }
 });
-
-module.exports=mongoose.model('Subject',SubjectSchema);

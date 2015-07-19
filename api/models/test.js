@@ -2,8 +2,8 @@
 const mongoose = require('mongoose');
 const $ = require('../services/validate');
 const _ = require('lodash');
-
-const TestSchema=new mongoose.Schema({
+const ChoiceSchema = require('./choice');
+const TestSchema = module.exports = new mongoose.Schema({
   text: {
     type: String,
     required: true
@@ -13,20 +13,7 @@ const TestSchema=new mongoose.Schema({
     required: true,
     enum: ['multiple','single','input']
   },
-  choices: [{
-    text: {
-      required: true,
-      type: String
-    },
-    correct: {
-      type: Boolean,
-      default: false
-    },
-    feedback: {
-      type: String,
-      required: true
-    }
-  }],
+  choices: [ChoiceSchema],
   unit: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'units',
@@ -58,5 +45,3 @@ TestSchema.statics.shuffle = function(conditions,projections,options){
     return tests;
   });
 };
-
-module.exports=mongoose.model('Test',TestSchema);

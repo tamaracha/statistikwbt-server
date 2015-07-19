@@ -1,13 +1,10 @@
 'use strict';
-const Rating=require('../models/rating');
-const Comment=require('../models/comment');
-const Guess=require('../models/guess');
 const ObjectId=require('mongoose').Types.ObjectId;
 const _=require('lodash');
 const $=module.exports={};
 
 $.guesses=function *(){
-  let guesses=yield Guess.aggregate([{
+  const guesses = yield models.Guess.aggregate([{
     $match: {
       user: new ObjectId(this.state.user._id),
       unit: new ObjectId(this.params.unit)
@@ -34,7 +31,7 @@ $.guesses=function *(){
 };
 
 $.akzeptanz=function *(){
-  let ratings = yield Rating.aggregate([
+  let ratings = yield models.Rating.aggregate([
   {
     $match: {
       'unit': new ObjectId(this.params.unit),
@@ -57,7 +54,7 @@ $.akzeptanz=function *(){
     result[key]=value.value;
   })
   .value();
-  let comment=yield Comment.findOne({
+  const comment = yield models.Comment.findOne({
     user: this.state.user._id,
     unit: this.params.unit
   })

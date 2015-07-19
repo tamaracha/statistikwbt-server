@@ -3,7 +3,6 @@ const _=require('lodash');
 const fs=require('fs');
 const path=require('path');
 const pandoc=require('../services/pandoc');
-const Unit=require('../models/unit');
 const template=fs.readFileSync(__dirname+'/download.md','utf8');
 const compiled=_.template(template,null,{variable: 'data', imports: {_: _}});
 const send=require('koa-send');
@@ -36,10 +35,10 @@ $.getUnits=function *getUnits(next){
   if(_.isString(this.query.contents)){
     this.query.contents=[this.query.contents];
   }
-  let query=Unit.find()
+  const query = models.Unit.find()
   .sort({position: 1});
   if(this.query.units){query.in('_id',this.query.units);}
-  let units=yield query.exec();
+  const units=yield query.exec();
   this.assert(units,'no units found',404);
   this.state.units=units;
   yield next;
@@ -60,7 +59,7 @@ $.getMarkdown=function *getMarkdown(next){
 };
 
 $.getFile=function *getFile(){
-  if(_.contains(binary,this.query.format)){
+  if(_.includes(binary,this.query.format)){
     let fileName=`${this.state.user._id}.${this.query.format}`;
     let filePath=path.join(dest,fileName);
     yield pandoc(this.state.md,'markdown',this.query.format,['-s','-o',filePath],{cwd: cwd});

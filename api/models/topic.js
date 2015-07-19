@@ -1,7 +1,8 @@
 'use strict';
 const mongoose=require('mongoose');
-
-const TopicSchema=new mongoose.Schema({
+const ExampleSchema = require('./example');
+const ExtraSchema = require('./extra');
+module.exports = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -12,8 +13,6 @@ const TopicSchema=new mongoose.Schema({
     type: String,
     required: true
   },
-  examples: [require('./example').schema],
-  extras: [require('./extra').schema]
+  examples: [ExampleSchema],
+  extras: [ExtraSchema]
 });
-
-module.exports=mongoose.model('Topic',TopicSchema);

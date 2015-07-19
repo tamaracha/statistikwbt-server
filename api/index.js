@@ -3,6 +3,7 @@ const Router=require('koa-router');
 const api=module.exports=new Router({prefix: '/api'});
 
 const config=require('config').get('jwt');
+global.models = require('./models');
 const ctrl=require('./controllers');
 
 // middleware
@@ -19,6 +20,13 @@ api.use(body,roles.middleware());
 // users
 let users=new Router();
 users.use('/:user',jwt,roles.can('access user'));
+const done = new Router();
+done.get('/',ctrl.done.index);
+done.post('/',ctrl.done.create);
+done.get('/:done',ctrl.done.show);
+done.put('/:done',ctrl.done.update);
+done.delete('/:done',ctrl.done.destroy);
+users.use('/:user/done',done.routes());
 users.head('/',ctrl.user.check);
 users.post('/',ctrl.user.create);
 users.get('/:user',ctrl.user.show);

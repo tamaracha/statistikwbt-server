@@ -1,11 +1,9 @@
 'use strict';
-const Vega = require('../models/vega');
 const ObjectId = require('mongoose').Types.ObjectId;
-
 const $ = module.exports = {};
 
 $.index = function *index(){
-  const specs = yield Vega.find(
+  const specs = yield models.Vega.find(
     this.query.conditions || null,
     this.query.projections || null,
     this.query.options || null
@@ -14,7 +12,7 @@ $.index = function *index(){
 };
 
 $.create = function *create(){
-  const spec = yield Vega.create(this.request.body);
+  const spec = yield models.Vega.create(this.request.body);
   this.assert(spec,'spec not created',404);
   this.body=spec;
 };
@@ -23,23 +21,23 @@ $.show = function *show(){
   const valid = ObjectId.isValid(this.params.vega);
   let spec;
   if(valid){
-    spec = yield Vega.findById(this.params.vega).lean().exec();
+    spec = yield models.Vega.findById(this.params.vega).lean().exec();
   }
   else{
-    spec = yield Vega.findOne({name: this.params.vega}).lean().exec();
+    spec = yield models.Vega.findOne({name: this.params.vega}).lean().exec();
   }
   this.assert(spec,'spec not found',404);
   this.body=spec;
 };
 
 $.update = function *update(){
-  const spec = yield Vega.findByIdAndUpdate(this.params.vega,this.request.body,{new: true});
+  const spec = yield models.Vega.findByIdAndUpdate(this.params.vega,this.request.body,{new: true});
   this.assert(spec,'no spec updated',404);
   this.body=spec;
 }
 
 $.destroy = function *destroy(){
-  const spec = yield Vega.findByIdAndRemove(this.params.vega);
+  const spec = yield models.Vega.findByIdAndRemove(this.params.vega);
   this.assert(spec,'no spec removed',404);
   this.body=spec;
 };

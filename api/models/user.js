@@ -1,9 +1,9 @@
 'use strict';
 const mongoose=require('mongoose');
-const bluebird=require('bluebird');
-const bcrypt=bluebird.promisifyAll(require('bcrypt-nodejs'));
+const bcrypt = require('bcrypt-nodejs');
 const validate=require('../services/validate');
 const ObjectId=mongoose.Schema.Types.ObjectId;
+const DoneSchema = require('./done');
 
 const UserSchema=new mongoose.Schema({
   email: {
@@ -42,12 +42,6 @@ const UserSchema=new mongoose.Schema({
       enum: ['interesse','langeweile','klausur']
     }]
   },
-  fsk: [{
-    sessko: {
-      type: [Number],
-      required: true
-    }
-  }],
   akzeptanz: {
     ratings: [{
       type: ObjectId,
@@ -58,28 +52,28 @@ const UserSchema=new mongoose.Schema({
       ref: 'comment'
     }]
   },
-  complete: [{
-    type: ObjectId,
-    ref: 'unit'
-  }],
+  done: [DoneSchema],
   views: [{
     type: ObjectId,
-    ref: 'view'
+    ref: 'views'
   }]
 });
 UserSchema.pre('save',function(cb){
-  let user=this;
+  const user = this;
   if(!user.isModified('password')){return cb();}
-  return bcrypt.hashAsync(user.password,null,null)
-  .then(function(hash){
-    user.password=hash;
+  bcrypt.hash(user.password,null,null,function(err,hash){
+    if(err){
+      return cb(err);
+    }
+    user.password = hash;
     return cb();
-  },function(e){
-    return cb(e);
   });
 });
 UserSchema.methods.validatePassword=function(password){
-  return bcrypt.compareAsync(password,this.password);
+  const user = this;
+  return function(cb){
+    bcrypt.compare(password,user.password,cb);
+  };
 };
 
 module.exports=mongoose.model('User',UserSchema);

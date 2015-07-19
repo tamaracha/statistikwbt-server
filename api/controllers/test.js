@@ -1,19 +1,17 @@
 'use strict';
-const Test = require('../models/test');
-const Guess = require('../models/guess');
 const _ = require('lodash');
 const jsonpatch = require('fast-json-patch');
 const $ = module.exports={};
 
 $.index=function *(){
   if(this.query.mode==='exercise'){
-    let tests = yield Test.shuffle(
+    let tests = yield models.Test.shuffle(
       this.query.conditions||null,
       this.query.projections||null,
       this.query.options||null
     );
     const ids = _.map(tests,'_id');
-    let guesses = yield Guess.find({
+    const guesses = yield models.Guess.find({
       user: this.state.user._id
     })
     .in('test',ids)
@@ -30,7 +28,7 @@ $.index=function *(){
     },[],this);
   }
   else{
-    let tests=yield Test.find(
+    const tests = yield models.Test.find(
       this.query.conditions||null,
       this.query.projections||null,
       this.query.options||null
@@ -40,13 +38,13 @@ $.index=function *(){
 };
 
 $.create=function *(){
-  let test=yield Test.create(this.request.body);
+  const test = yield models.Test.create(this.request.body);
   this.assert(test,'test not created',404);
   this.body=test;
 };
 
 $.show=function *(){
-  let test=yield Test.findById(this.params.test);
+  const test = yield models.Test.findById(this.params.test);
   this.assert(test,'test not found',404);
   this.body=test;
 };
@@ -64,12 +62,14 @@ $.update=function *(){
 */
 
 $.update=function *(){
-  let test=yield Test.findByIdAndUpdate(this.params.test,this.request.body,{new: true});
+  const test = yield models.Test.findByIdAndUpdate(this.params.test,this.request.body,{
+    new: true
+  });
   this.assert(test,'test not updated',404);
   this.body=test;
 };
 
 $.destroy=function *(){
-  yield Test.findByIdAndRemove(this.params.test).exec();
+  yield models.Test.findByIdAndRemove(this.params.test).exec();
   this.status=200;
 };
