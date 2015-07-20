@@ -20,7 +20,7 @@
     "jsonwebtoken": "^5.0.4",
     "koa": "^0.21.0",
     "koa-body": "^1.2.1",
-    "koa-helmet": "^0.1.0",
+    "koa-helmet": "^0.2.0",
     "koa-jwt": "^1.1.1",
     "koa-morgan": "^0.3.0",
     "koa-onerror": "^1.2.1",

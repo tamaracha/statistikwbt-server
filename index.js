@@ -14,7 +14,7 @@ require('koa-onerror')(app);
 if(config.get('logging')){
   app.use(require('koa-morgan').middleware('dev'));
 }
-app.use(helmet.defaults())
+app.use(helmet())
 .use(api.routes())
 .use(api.allowedMethods());
 if(assets.serve){
