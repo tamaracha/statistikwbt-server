@@ -34,17 +34,14 @@ $.show=function *(){
 $.update=function *(){
   const unit = yield models.Unit.findById(this.params.unit).exec();
   this.assert(unit,'unit not found',404);
-  const topic = unit.topics.pull(this.params.topic);
-  this.assert(topic,'topic not found',404);
-  const patch=jsonpatch.apply(topic,this.request.body,true);
-  if(patch === true){
-    unit.topics.push(topic);
-    yield unit.save();
-    this.status=200;
-  }
-  else{
-    this.throw('patch not successful');
-  }
+  const topic = unit.topics.id(this.params.topic);
+  this.assert(topic,'not found',404);
+  const index = unit.topics.indexOf(topic);
+  console.log(index);
+  const patch=jsonpatch.apply(unit.topics[index],this.request.body,true);
+  this.assert(patch,'patch not successful',500);
+  yield unit.save();
+  this.status=200;
 };
 
 $.destroy=function *(){
