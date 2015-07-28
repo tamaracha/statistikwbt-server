@@ -13,8 +13,7 @@ const files = [
   'topic',
   'unit',
   'user',
-  'vega',
-  'datasets'
+  'vega'
 ];
 module.exports = _.transform(files,function(ctrl,f){
   ctrl[f] = require('./'+f);

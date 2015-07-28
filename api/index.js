@@ -80,9 +80,11 @@ vega.put('/:vega',roles.can('edit content'),ctrl.vega.update);
 vega.delete('/:vega',roles.can('edit content'),ctrl.vega.destroy);
 api.use('/vega',jwt,vega.routes());
 
+/*
 const datasets = new Router();
 datasets.get('/correlation',roles.can('access content'),ctrl.datasets.correlation);
 api.use('/data',jwt,datasets.routes());
+*/
 
 const guesses = new Router();
 guesses.post('/',ctrl.guess.create);
