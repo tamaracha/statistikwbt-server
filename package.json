@@ -6,9 +6,12 @@
   "scripts": {
     "start": "node --es_staging index.js",
     "test": "karma start",
-    "lint": "jshint **.js"
+    "lint": "eslint **.js"
   },
-  "author": "Tamara Cook",
+  "author": {
+    "name": "Tamara Cook",
+    "email": "tamara.cook@icloud.com"
+  },
   "license": "ISC",
   "dependencies": {
     "basic-auth": "^1.0.3",
